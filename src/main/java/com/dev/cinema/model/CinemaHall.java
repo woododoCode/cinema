@@ -8,12 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "movies")
-public class Movie {
+@Table(name = "cinema_halls")
+public class CinemaHall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
+    private Integer capacity;
     private String description;
 
     public Long getId() {
@@ -24,12 +24,12 @@ public class Movie {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public Integer getCapacity() {
+        return capacity;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
     }
 
     public String getDescription() {
@@ -41,30 +41,30 @@ public class Movie {
     }
 
     @Override
-    public String toString() {
-        return "Movie{"
-                + "id=" + id
-                + ", title=" + title
-                + ", description=" + description
-                + '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Movie)) {
+        if (!(o instanceof CinemaHall)) {
             return false;
         }
-        Movie movie = (Movie) o;
-        return Objects.equals(getId(), movie.getId())
-                && Objects.equals(getTitle(), movie.getTitle())
-                && Objects.equals(getDescription(), movie.getDescription());
+        CinemaHall that = (CinemaHall) o;
+        return Objects.equals(getId(), that.getId())
+                && Objects.equals(getCapacity(), that.getCapacity())
+                && Objects.equals(getDescription(), that.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getDescription());
+        return Objects.hash(getId(), getCapacity(), getDescription());
+    }
+
+    @Override
+    public String toString() {
+        return "CinemaHall{"
+                + "id=" + id
+                + ", capacity=" + capacity
+                + ", description='" + description
+                + '}';
     }
 }

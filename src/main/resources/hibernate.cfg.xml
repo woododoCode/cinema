@@ -11,9 +11,6 @@
         <property name="hibernate.connection.password">poline3</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">create-drop</property>
-
         <mapping class="com.dev.cinema.model.Movie"/>
-        <mapping class="com.dev.cinema.model.MovieSession"/>
-        <mapping class="com.dev.cinema.model.CinemaHall"/>
     </session-factory>
 </hibernate-configuration>

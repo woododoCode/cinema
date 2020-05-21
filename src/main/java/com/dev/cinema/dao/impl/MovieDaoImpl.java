@@ -1,6 +1,5 @@
 package com.dev.cinema.dao.impl;
 
-import com.dev.cinema.Main;
 import com.dev.cinema.dao.MovieDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;

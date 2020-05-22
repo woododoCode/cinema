@@ -5,7 +5,7 @@ import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.util.HibernateUtil;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,7 +21,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
     private static final Logger LOGGER = LogManager.getLogger(MovieSessionDaoImpl.class);
 
     @Override
-    public List<MovieSession> findAvailableSessions(Long movieId, LocalDateTime date) {
+    public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<MovieSession> criteriaQuery = criteriaBuilder
@@ -30,7 +30,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             Predicate idPredicate = criteriaBuilder
                     .equal(sessionRoot.get("movie"), movieId);
             Predicate datePredicate = criteriaBuilder
-                    .greaterThan(sessionRoot.get("showtime"), date);
+                    .greaterThan(sessionRoot.get("showtime"), date.atStartOfDay());
             criteriaQuery.where(idPredicate, datePredicate);
             return session.createQuery(criteriaQuery).list();
         } catch (Exception e) {

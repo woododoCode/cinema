@@ -7,6 +7,7 @@ import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
@@ -56,7 +57,7 @@ public class Main {
         movieService.getAll().forEach(System.out::println);
         cinemaHallService.getAll().forEach(System.out::println);
         movieSessionService.getAll().forEach(System.out::println);
-        LocalDateTime date = LocalDateTime.of(2020, Month.MAY, 31, 15, 10);
+        LocalDate date = LocalDate.of(2020, Month.MAY, 3);
         movieSessionService.findAvailableSessions(movie.getId(), date).forEach(System.out::println);
     }
 }

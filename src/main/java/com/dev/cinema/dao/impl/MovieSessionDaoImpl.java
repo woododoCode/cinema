@@ -1,6 +1,6 @@
 package com.dev.cinema.dao.impl;
 
-import com.dev.cinema.dao.MovieSessionDao;
+import com.dev.cinema.dao.interfaces.MovieSessionDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.MovieSession;
@@ -35,7 +35,8 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             return session.createQuery(criteriaQuery).list();
         } catch (Exception e) {
             throw new DataProcessingException(String
-                    .format("Failed to retrieve movie sessions by movie id:%s", movieId), e);
+                    .format("Failed to retrieve movie sessions by movie id:%s and on date:%s",
+                            movieId, date), e);
         }
     }
 
@@ -58,9 +59,8 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Long movieSessionId = (Long) session.save(movieSession);
+            session.save(movieSession);
             transaction.commit();
-            movieSession.setId(movieSessionId);
             LOGGER.info("Movie session " + movieSession
                     + "was successfully added to db");
             return movieSession;

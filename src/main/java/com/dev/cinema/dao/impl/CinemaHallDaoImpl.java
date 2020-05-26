@@ -1,6 +1,6 @@
 package com.dev.cinema.dao.impl;
 
-import com.dev.cinema.dao.CinemaHallDao;
+import com.dev.cinema.dao.interfaces.CinemaHallDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.CinemaHall;
@@ -23,9 +23,8 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Long cinemaHallId = (Long) session.save(cinemaHall);
+            session.save(cinemaHall);
             transaction.commit();
-            cinemaHall.setId(cinemaHallId);
             LOGGER.info("Cinema hall " + cinemaHall
                     + "was successfully added to db");
             return cinemaHall;

@@ -1,12 +1,15 @@
 package com.dev.cinema;
 
+import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -14,7 +17,7 @@ import java.time.Month;
 public class Main {
     private static final Injector injector = Injector.getInstance("com.dev.cinema");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AuthenticationException {
         var movieService = (MovieService) injector.getInstance(MovieService.class);
         var movie = new Movie();
         movie.setTitle("Flubber");
@@ -49,6 +52,10 @@ public class Main {
         andAnotherOneMovieSession.setShowtime(LocalDateTime.of(2020, Month.MAY, 31, 23, 20));
         var movieSessionService =
                 (MovieSessionService) injector.getInstance(MovieSessionService.class);
+        var authenticationService =
+                (AuthenticationService) injector.getInstance(AuthenticationService.class);
+
+        authenticationService.register("grabli2@mail.com","grabli2");
 
         movieSessionService.add(movieSession);
         movieSessionService.add(anotherOneMovieSession);
@@ -59,5 +66,9 @@ public class Main {
         movieSessionService.getAll().forEach(System.out::println);
         LocalDate date = LocalDate.of(2020, Month.MAY, 3);
         movieSessionService.findAvailableSessions(movie.getId(), date).forEach(System.out::println);
+        var userService =
+                (UserService) injector.getInstance(UserService.class);
+        userService.getAll().forEach(System.out::println);
+        authenticationService.login("grabli@mail.com", "grabli2");
     }
 }

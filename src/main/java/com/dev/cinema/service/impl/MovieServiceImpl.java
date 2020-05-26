@@ -1,6 +1,6 @@
 package com.dev.cinema.service.impl;
 
-import com.dev.cinema.dao.MovieDao;
+import com.dev.cinema.dao.interfaces.MovieDao;
 import com.dev.cinema.lib.Inject;
 import com.dev.cinema.lib.Service;
 import com.dev.cinema.model.Movie;

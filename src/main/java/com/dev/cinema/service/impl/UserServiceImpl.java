@@ -6,7 +6,6 @@ import com.dev.cinema.lib.Service;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.UserService;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -14,12 +13,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        Optional<User> getUserFromDB = userDao.findByEmail(email);
-        if (getUserFromDB.isPresent()) {
-            return getUserFromDB;
-        }
-        return null;
+    public User findByEmail(String email) {
+        return userDao.findByEmail(email).orElse(null);
     }
 
     @Override

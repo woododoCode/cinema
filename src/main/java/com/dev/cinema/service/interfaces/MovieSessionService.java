@@ -1,4 +1,4 @@
-package com.dev.cinema.service;
+package com.dev.cinema.service.interfaces;
 
 import com.dev.cinema.model.MovieSession;
 import java.time.LocalDate;

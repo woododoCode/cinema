@@ -7,17 +7,18 @@ import com.dev.cinema.model.Movie;
 import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.Cleanup;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Log4j2
 @Dao
 public class MovieDaoImpl implements MovieDao {
-    private static final Logger LOGGER = LogManager.getLogger(MovieDaoImpl.class);
 
     @Override
     public Movie add(Movie movie) {
+        @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,17 +26,13 @@ public class MovieDaoImpl implements MovieDao {
             transaction = session.beginTransaction();
             session.save(movie);
             transaction.commit();
-            LOGGER.info(movie);
+            log.info(String.format("The %s movie was added to db", movie.getTitle()));
             return movie;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert Movie entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 

@@ -8,7 +8,7 @@ import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
-import com.dev.cinema.service.ShoppingCartService;
+import com.dev.cinema.service.interfaces.ShoppingCartService;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -38,5 +38,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         shoppingCartDao.add(shoppingCart);
+    }
+
+    @Override
+    public void clear(ShoppingCart shoppingCart) {
+        shoppingCart.getTickets().clear();
+        shoppingCartDao.update(shoppingCart);
     }
 }

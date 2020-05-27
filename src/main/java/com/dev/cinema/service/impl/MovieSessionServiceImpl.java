@@ -4,7 +4,7 @@ import com.dev.cinema.dao.interfaces.MovieSessionDao;
 import com.dev.cinema.lib.Inject;
 import com.dev.cinema.lib.Service;
 import com.dev.cinema.model.MovieSession;
-import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.interfaces.MovieSessionService;
 import java.time.LocalDate;
 import java.util.List;
 

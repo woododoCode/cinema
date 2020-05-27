@@ -7,17 +7,18 @@ import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.Cleanup;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Log4j2
 @Dao
 public class CinemaHallDaoImpl implements CinemaHallDao {
-    private static final Logger LOGGER = LogManager.getLogger(CinemaHallDao.class);
 
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {
+        @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
@@ -25,18 +26,14 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             transaction = session.beginTransaction();
             session.save(cinemaHall);
             transaction.commit();
-            LOGGER.info("Cinema hall " + cinemaHall
-                    + "was successfully added to db");
+            log.info(String.format("Cinema hall  with id %s was successfully added to db",
+                    cinemaHall.getId()));
             return cinemaHall;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert cinemaHall entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 

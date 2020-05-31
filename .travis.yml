@@ -1,8 +1,16 @@
 language: java
 jdk:
-  - openjdk14
+- openjdk14
 script:
-  - mvn clean install
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=woododoCode_cinema
 cache:
   directories:
-    - $HOME/.m2
+  - "$HOME/.m2"
+addons:
+  sonarcloud:
+    organization: woododocode
+    token:
+      secure: "**************************"
+env:
+  global:
+    secure: GOy+gGrnLnp58x2dzFLqk71jgXOLjl6zWilVQ7l+vnuBmvh/A1YCsoyEnduyoInWdI6If5v5jFTVvAEMknxEiQd6wLkXszhTROWH0fZRmVtsj3AadL25mkUeEOYgYxGfgctjxIzInB8BVAoj/sMJm1M44D0iHidgr7kotisfQl+EjLxIGQJk8Tq75NqAtjuIGDXEZbAGI/2g71adcNyAengA8ValkpMMaCu/HvCXWe+tKn7mO0rUGSNtuB5QLQeNXliA16uBmhrW/9HiGA6O6NaUrrIp2jfgh3URAPIDkA6AYlE0i9cjPvYu3f54qx/KbRO8quKgtjG5usYBbaacYmiaO9rM8Rgh3GAY6hKu5WWuHFrKebRTlvk5SFx4Xxb8W1u6nJxKQgt5U6mNHGHgak7RBzrovL2J/4do381xfPM5quDo60+rZwvesYr4YNgkwqhrFJ6cyO80JrAa/0tyg54h5NzeKRAWGDhmANOiPNudbu+wW+0aaY62DwQig5agAPAescseDfKwe5HkHB5o+ThI8HG7QgNDV2NDv3rSTY6KoOWLH81G2YoLJPMnofvjJ0tlsyF9lQfZt7uBEkXfREku7yU9GXkVsir8XWYy4kCkITUuwmkYzXz8+V+pFKGHCHaSsvQWw3u2llF8JcAeE3k8u/9OBKKIBXAgC4pLO0Q=

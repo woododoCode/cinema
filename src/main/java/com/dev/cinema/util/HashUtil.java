@@ -6,27 +6,24 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import lombok.SneakyThrows;
 
 public class HashUtil {
     private static final int ITERATION_COUNT = 60000;
     private static final int KEY_LENGTH = 512;
 
+    @SneakyThrows({InvalidKeySpecException.class, NoSuchAlgorithmException.class})
     public static String hashPassword(String password, byte[] salt) {
-        try {
-            char[] passwordToChar = password.toCharArray();
-            SecretKeyFactory secretKeyFactory =
-                    SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-            PBEKeySpec spec = new PBEKeySpec(passwordToChar, salt, ITERATION_COUNT, KEY_LENGTH);
-            SecretKey secretKey = secretKeyFactory.generateSecret(spec);
-            byte[] keyEncoded = secretKey.getEncoded();
-            StringBuilder hashedString = new StringBuilder();
-            for (byte b : keyEncoded) {
-                hashedString.append(String.format("%02x", b));
-            }
-            return hashedString.toString();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+        char[] passwordToChar = password.toCharArray();
+        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+        PBEKeySpec spec = new PBEKeySpec(passwordToChar, salt, ITERATION_COUNT, KEY_LENGTH);
+        SecretKey secretKey = secretKeyFactory.generateSecret(spec);
+        byte[] keyEncoded = secretKey.getEncoded();
+        StringBuilder hashedString = new StringBuilder();
+        for (byte b : keyEncoded) {
+            hashedString.append(String.format("%02x", b));
         }
+        return hashedString.toString();
     }
 
     public static byte[] getSalt() {

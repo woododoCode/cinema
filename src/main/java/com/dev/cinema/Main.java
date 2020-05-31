@@ -1,6 +1,5 @@
 package com.dev.cinema;
 
-import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
@@ -22,7 +21,7 @@ import java.util.List;
 public class Main {
     private static final Injector INJECTOR = Injector.getInstance("com.dev.cinema");
 
-    public static void main(String[] args) throws AuthenticationException {
+    public static void main(String[] args) {
         var movieService = (MovieService) INJECTOR.getInstance(MovieService.class);
         var movie = new Movie();
         movie.setTitle("Flubber");

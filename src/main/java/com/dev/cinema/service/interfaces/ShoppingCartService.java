@@ -1,4 +1,4 @@
-package com.dev.cinema.service;
+package com.dev.cinema.service.interfaces;
 
 import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.model.ShoppingCart;
@@ -11,4 +11,6 @@ public interface ShoppingCartService {
     ShoppingCart getByUser(User user);
 
     void registerNewShoppingCart(User user);
+
+    void clear(ShoppingCart shoppingCart);
 }

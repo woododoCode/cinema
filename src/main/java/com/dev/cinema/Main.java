@@ -5,22 +5,25 @@ import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
 import com.dev.cinema.security.AuthenticationService;
-import com.dev.cinema.service.CinemaHallService;
-import com.dev.cinema.service.MovieService;
-import com.dev.cinema.service.MovieSessionService;
-import com.dev.cinema.service.ShoppingCartService;
-import com.dev.cinema.service.UserService;
+import com.dev.cinema.service.interfaces.CinemaHallService;
+import com.dev.cinema.service.interfaces.MovieService;
+import com.dev.cinema.service.interfaces.MovieSessionService;
+import com.dev.cinema.service.interfaces.OrderService;
+import com.dev.cinema.service.interfaces.ShoppingCartService;
+import com.dev.cinema.service.interfaces.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 
 public class Main {
-    private static final Injector injector = Injector.getInstance("com.dev.cinema");
+    private static final Injector INJECTOR = Injector.getInstance("com.dev.cinema");
 
     public static void main(String[] args) throws AuthenticationException {
-        var movieService = (MovieService) injector.getInstance(MovieService.class);
+        var movieService = (MovieService) INJECTOR.getInstance(MovieService.class);
         var movie = new Movie();
         movie.setTitle("Flubber");
         movie.setDescription("Professor Philip Brainard (Robin Williams), "
@@ -36,7 +39,7 @@ public class Main {
         greenHall.setCapacity(400);
         greenHall.setDescription("Just for students =)");
         var cinemaHallService =
-                (CinemaHallService) injector.getInstance(CinemaHallService.class);
+                (CinemaHallService) INJECTOR.getInstance(CinemaHallService.class);
         cinemaHallService.add(blueHall);
         cinemaHallService.add(greenHall);
 
@@ -53,7 +56,7 @@ public class Main {
         andAnotherOneMovieSession.setCinemaHall(blueHall);
         andAnotherOneMovieSession.setShowtime(LocalDateTime.of(2020, Month.MAY, 31, 23, 20));
         var movieSessionService =
-                (MovieSessionService) injector.getInstance(MovieSessionService.class);
+                (MovieSessionService) INJECTOR.getInstance(MovieSessionService.class);
 
         movieSessionService.add(movieSession);
         movieSessionService.add(anotherOneMovieSession);
@@ -65,15 +68,20 @@ public class Main {
         LocalDate date = LocalDate.of(2020, Month.MAY, 3);
         movieSessionService.findAvailableSessions(movie.getId(), date).forEach(System.out::println);
         var authenticationService =
-                (AuthenticationService) injector.getInstance(AuthenticationService.class);
+                (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
         var userService =
-                (UserService) injector.getInstance(UserService.class);
+                (UserService) INJECTOR.getInstance(UserService.class);
         userService.getAll().forEach(System.out::println);
-        var shoppingCrtService =
-                (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
+        var shoppingCartService =
+                (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
         User grabli2 = authenticationService.register("grabli2@mail.com", "grabli2");
-        shoppingCrtService.addSession(movieSession, grabli2);
-        System.out.println(shoppingCrtService.getByUser(grabli2));
+        shoppingCartService.addSession(movieSession, grabli2);
+        System.out.println(shoppingCartService.getByUser(grabli2));
 
+        var orderService =
+                (OrderService) INJECTOR.getInstance(OrderService.class);
+        List<Ticket> tickets = shoppingCartService.getByUser(grabli2).getTickets();
+        orderService.completeOrder(tickets, grabli2);
+        System.out.println(orderService.getOrderHistory(grabli2));
     }
 }

@@ -12,17 +12,18 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.Cleanup;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Log4j2
 @Dao
 public class ShoppingCartDaoImpl implements ShoppingCartDao {
-    private static final Logger LOGGER = LogManager.getLogger(ShoppingCartDaoImpl.class);
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
+        @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
@@ -30,18 +31,14 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
             transaction = session.beginTransaction();
             session.save(shoppingCart);
             transaction.commit();
-            LOGGER.info("Shopping Cart with ID" + shoppingCart.getId()
-                    + "was successfully added to db");
+            log.info(String.format("Shopping Cart with id %s was successfully added to db",
+                    shoppingCart.getId()));
             return shoppingCart;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert Shopping Cart entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 
@@ -63,6 +60,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public void update(ShoppingCart shoppingCart) {
+        @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
@@ -70,17 +68,14 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
             transaction = session.beginTransaction();
             session.update(shoppingCart);
             transaction.commit();
-            LOGGER.info("Shopping Cart with ID" + shoppingCart.getId()
-                    + "was successfully added to db");
+            log.info(String
+                    .format("Shopping Cart with id %s was successfully updated",
+                            shoppingCart.getId()));
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert Shopping Cart entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 }

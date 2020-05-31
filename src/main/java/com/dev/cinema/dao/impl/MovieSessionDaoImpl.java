@@ -11,14 +11,14 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.Cleanup;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Log4j2
 @Dao
 public class MovieSessionDaoImpl implements MovieSessionDao {
-    private static final Logger LOGGER = LogManager.getLogger(MovieSessionDaoImpl.class);
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
@@ -54,6 +54,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public MovieSession add(MovieSession movieSession) {
+        @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
@@ -61,18 +62,14 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             transaction = session.beginTransaction();
             session.save(movieSession);
             transaction.commit();
-            LOGGER.info("Movie session " + movieSession
-                    + "was successfully added to db");
+            log.info(String.format("Movie session with id: %s was successfully added to db",
+                    movieSession.getId()));
             return movieSession;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert MovieSession entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 }

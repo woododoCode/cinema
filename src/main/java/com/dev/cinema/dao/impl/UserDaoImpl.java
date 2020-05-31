@@ -11,17 +11,18 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.Cleanup;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Log4j2
 @Dao
 public class UserDaoImpl implements UserDao {
-    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 
     @Override
     public User add(User user) {
+        @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
@@ -29,7 +30,7 @@ public class UserDaoImpl implements UserDao {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
-            LOGGER.info("User " + user
+            log.info("User " + user
                     + " was successfully added to db");
             return user;
         } catch (Exception e) {
@@ -37,10 +38,6 @@ public class UserDaoImpl implements UserDao {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert User entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 

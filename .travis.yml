@@ -2,14 +2,7 @@ language: java
 jdk:
   - openjdk14
 script:
-  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=woododoCode_cinema
+  - mvn clean install
 cache:
   directories:
     - "$HOME/.m2"
-addons:
-  sonarcloud:
-    organization: woododocode
-    token:
-      secure: "Sm230ejLJVrGxgYW6aXwgVh+XrwbCcWVTGHcmVp0ytQcJkLN5VzkokhcNoOZnwYPeSGgHODe4iFrjj0JU9kaL3c9t/FT4LMsvRw7Dkiu+9y/H804p/3KAG5ETtjN68GUeEEI4m5vEmACAcGKwdAOWuoSLWAD4US61z5qoUuJrNpUo6bEb+nwihFlqNLuXc/KoH98MRQCCQLVLY/i2P+z1PMl8n3IbzcPeSDrNsJy2Sjvojg6rdKnkGSsRzxkO9
-        DUCktAsKlcJi0iMZSy4Iok9sal0czP9TLjRU/XIZV4Ezcfeyc4Y3UeH1uAWaa+T5D05ueKja6OOfC3D17vgzKMPTpAkqpHwjgIItRL/z4QoZlhnBCQ0/m38q0lQ2YHfnT7hjrPBELXgwHt+Wi3UnX5ZsHK/XCsvMVVzAv3KXewsoVLfTdvdkR1PW4EfdRmAOD9hAnsgmyk5uKchg2AwbfY6NjZKgdcaAomyFbslLpcIrF7l75MSpnNI042d9glMoFDed/Q3Sd
-        SZAFSsdMuoMTZxM2A7STse1XbNsYRGs1eLomJt2RyxVdn6dIVIxal4HlNEYaFuEdCOkc78vfJuwUuTsfdfcEEg/DRX/0nMi9ZH/BaZFxraElXEuEuLsYkEJeHKxvQm0HFAExbQ2jcBqhaWJycS644DU+F9oYmFuB9UVs="

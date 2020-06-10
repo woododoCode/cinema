@@ -1,6 +1,6 @@
 package com.dev.cinema;
 
-import com.dev.cinema.lib.Injector;
+import com.dev.cinema.config.AppConfig;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
@@ -17,12 +17,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
-    private static final Injector INJECTOR = Injector.getInstance("com.dev.cinema");
+    private static final AnnotationConfigApplicationContext context =
+            new AnnotationConfigApplicationContext(AppConfig.class);
 
     public static void main(String[] args) {
-        var movieService = (MovieService) INJECTOR.getInstance(MovieService.class);
+        var movieService = context.getBean(MovieService.class);
         var movie = new Movie();
         movie.setTitle("Flubber");
         movie.setDescription("Professor Philip Brainard (Robin Williams), "
@@ -37,8 +39,7 @@ public class Main {
         var greenHall = new CinemaHall();
         greenHall.setCapacity(400);
         greenHall.setDescription("Just for students =)");
-        var cinemaHallService =
-                (CinemaHallService) INJECTOR.getInstance(CinemaHallService.class);
+        var cinemaHallService = context.getBean(CinemaHallService.class);
         cinemaHallService.add(blueHall);
         cinemaHallService.add(greenHall);
 
@@ -54,8 +55,7 @@ public class Main {
         andAnotherOneMovieSession.setMovie(movie);
         andAnotherOneMovieSession.setCinemaHall(blueHall);
         andAnotherOneMovieSession.setShowtime(LocalDateTime.of(2020, Month.MAY, 31, 23, 20));
-        var movieSessionService =
-                (MovieSessionService) INJECTOR.getInstance(MovieSessionService.class);
+        var movieSessionService = context.getBean(MovieSessionService.class);
 
         movieSessionService.add(movieSession);
         movieSessionService.add(anotherOneMovieSession);
@@ -66,19 +66,15 @@ public class Main {
         movieSessionService.getAll().forEach(System.out::println);
         LocalDate date = LocalDate.of(2020, Month.MAY, 3);
         movieSessionService.findAvailableSessions(movie.getId(), date).forEach(System.out::println);
-        var authenticationService =
-                (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
-        var userService =
-                (UserService) INJECTOR.getInstance(UserService.class);
+        var authenticationService = context.getBean(AuthenticationService.class);
+        var userService = context.getBean(UserService.class);
         userService.getAll().forEach(System.out::println);
-        var shoppingCartService =
-                (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
+        var shoppingCartService = context.getBean(ShoppingCartService.class);
         User grabli2 = authenticationService.register("grabli2@mail.com", "grabli2");
         shoppingCartService.addSession(movieSession, grabli2);
         System.out.println(shoppingCartService.getByUser(grabli2));
 
-        var orderService =
-                (OrderService) INJECTOR.getInstance(OrderService.class);
+        var orderService = context.getBean(OrderService.class);
         List<Ticket> tickets = shoppingCartService.getByUser(grabli2).getTickets();
         orderService.completeOrder(tickets, grabli2);
         System.out.println(orderService.getOrderHistory(grabli2));

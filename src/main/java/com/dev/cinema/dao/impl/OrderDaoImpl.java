@@ -2,10 +2,8 @@ package com.dev.cinema.dao.impl;
 
 import com.dev.cinema.dao.interfaces.OrderDao;
 import com.dev.cinema.exceptions.DataProcessingException;
-import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.Order;
 import com.dev.cinema.model.User;
-import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,18 +13,26 @@ import javax.persistence.criteria.Root;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 @Log4j2
-@Dao
+@Repository
 public class OrderDaoImpl implements OrderDao {
+    private final SessionFactory sessionFactory;
+
+    public OrderDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public Order add(Order order) {
         @Cleanup
         Session session = null;
         Transaction transaction = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.save(order);
             transaction.commit();
@@ -43,7 +49,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getAllOrdersByUser(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Order> criteriaQuery = criteriaBuilder
                     .createQuery(Order.class);

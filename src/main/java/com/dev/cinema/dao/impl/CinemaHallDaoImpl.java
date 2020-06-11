@@ -4,7 +4,11 @@ import com.dev.cinema.dao.interfaces.CinemaHallDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.CinemaHall;
 import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
@@ -13,13 +17,10 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Log4j2
+@AllArgsConstructor
 @Repository
 public class CinemaHallDaoImpl implements CinemaHallDao {
     private final SessionFactory sessionFactory;
-
-    public CinemaHallDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {
@@ -51,6 +52,21 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Error retrieving all CinemaHalls. ", e);
+        }
+    }
+
+    @Override
+    public CinemaHall getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<CinemaHall> criteriaQuery =
+                    criteriaBuilder.createQuery(CinemaHall.class);
+            Root<CinemaHall> sessionRoot = criteriaQuery.from(CinemaHall.class);
+            Predicate predicate = criteriaBuilder.equal(sessionRoot.get("id"), id);
+            return session.createQuery(criteriaQuery.where(predicate)).getSingleResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Failed to retrieve "
+                    + "CinemaHall from DB with ID: " + id, e);
         }
     }
 }

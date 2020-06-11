@@ -2,6 +2,7 @@ package com.dev.cinema.config;
 
 import java.util.Properties;
 import javax.sql.DataSource;
+import lombok.AllArgsConstructor;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,14 +17,13 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
         "com.dev.cinema.service",
         "com.dev.cinema.dao",
         "com.dev.cinema.security",
+        "com.dev.cinema.util",
+        "com.dev.cinema.model.mappers",
 })
 
+@AllArgsConstructor
 public class AppConfig {
     private Environment env;
-
-    public AppConfig(Environment env) {
-        this.env = env;
-    }
 
     @Bean
     public DataSource getDataSource() {

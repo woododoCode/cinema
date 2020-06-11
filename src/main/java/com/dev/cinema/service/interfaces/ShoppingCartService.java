@@ -4,7 +4,7 @@ import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.User;
 
-public interface ShoppingCartService {
+public interface ShoppingCartService extends GenericService<ShoppingCart> {
 
     void addSession(MovieSession movieSession, User user);
 

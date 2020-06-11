@@ -7,17 +7,15 @@ import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.interfaces.ShoppingCartService;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    private ShoppingCartDao shoppingCartDao;
-    private TicketDao ticketDao;
-
-    public ShoppingCartServiceImpl(ShoppingCartDao shoppingCartDao, TicketDao ticketDao) {
-        this.shoppingCartDao = shoppingCartDao;
-        this.ticketDao = ticketDao;
-    }
+    private final ShoppingCartDao shoppingCartDao;
+    private final TicketDao ticketDao;
 
     @Override
     public void addSession(MovieSession movieSession, User user) {
@@ -45,5 +43,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void clear(ShoppingCart shoppingCart) {
         shoppingCart.getTickets().clear();
         shoppingCartDao.update(shoppingCart);
+    }
+
+    @Override
+    public ShoppingCart add(ShoppingCart shoppingCart) {
+        return shoppingCartDao.add(shoppingCart);
+    }
+
+    @Override
+    public List<ShoppingCart> getAll() {
+        return shoppingCartDao.getAll();
+    }
+
+    @Override
+    public ShoppingCart getById(Long id) {
+        return shoppingCartDao.getById(id);
     }
 }

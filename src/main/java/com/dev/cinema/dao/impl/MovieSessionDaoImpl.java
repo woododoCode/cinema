@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
@@ -17,13 +18,10 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Log4j2
+@AllArgsConstructor
 @Repository
 public class MovieSessionDaoImpl implements MovieSessionDao {
     private final SessionFactory sessionFactory;
-
-    public MovieSessionDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
@@ -54,6 +52,21 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Error retrieving MovieSessions. ", e);
+        }
+    }
+
+    @Override
+    public MovieSession getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<MovieSession> criteriaQuery =
+                    criteriaBuilder.createQuery(MovieSession.class);
+            Root<MovieSession> sessionRoot = criteriaQuery.from(MovieSession.class);
+            Predicate predicate = criteriaBuilder.equal(sessionRoot.get("id"), id);
+            return session.createQuery(criteriaQuery.where(predicate)).getSingleResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Failed to retrieve "
+                    + "MovieSession from DB with ID: " + id, e);
         }
     }
 

@@ -4,12 +4,14 @@ import com.dev.cinema.dao.interfaces.ShoppingCartDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.User;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
@@ -18,13 +20,10 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Log4j2
+@AllArgsConstructor
 @Repository
 public class ShoppingCartDaoImpl implements ShoppingCartDao {
     private final SessionFactory sessionFactory;
-
-    public ShoppingCartDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
@@ -44,6 +43,34 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert Shopping Cart entity", e);
+        }
+    }
+
+    @Override
+    public List<ShoppingCart> getAll() {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaQuery<ShoppingCart> criteriaQuery =
+                    session.getCriteriaBuilder().createQuery(ShoppingCart.class);
+            criteriaQuery.from(ShoppingCart.class);
+            return session.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Error retrieving ShoppingCarts. ", e);
+        }
+    }
+
+    @Override
+    public ShoppingCart getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<ShoppingCart> criteriaQuery =
+                    criteriaBuilder.createQuery(ShoppingCart.class);
+            Root<ShoppingCart> sessionRoot = criteriaQuery.from(ShoppingCart.class);
+            Predicate predicate = criteriaBuilder.equal(sessionRoot.get("id"), id);
+            sessionRoot.fetch("tickets", JoinType.LEFT);
+            return session.createQuery(criteriaQuery.where(predicate)).uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Failed to retrieve "
+                    + "ShoppingCart from DB with ID: " + id, e);
         }
     }
 

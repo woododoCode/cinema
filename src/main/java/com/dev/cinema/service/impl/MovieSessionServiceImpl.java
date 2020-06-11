@@ -5,15 +5,13 @@ import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.service.interfaces.MovieSessionService;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class MovieSessionServiceImpl implements MovieSessionService {
     private final MovieSessionDao movieSessionDao;
-
-    public MovieSessionServiceImpl(MovieSessionDao movieSessionDao) {
-        this.movieSessionDao = movieSessionDao;
-    }
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
@@ -23,6 +21,11 @@ public class MovieSessionServiceImpl implements MovieSessionService {
     @Override
     public List<MovieSession> getAll() {
         return movieSessionDao.getAll();
+    }
+
+    @Override
+    public MovieSession getById(Long id) {
+        return movieSessionDao.getById(id);
     }
 
     @Override

@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/registration")
+@RequestMapping
 public class AuthenticationController {
     private final AuthenticationService service;
 
-    @PostMapping
+    @PostMapping("/registration")
     public void registration(@RequestBody UserRequestDto requestDto) {
         service.register(requestDto.getEmail(), requestDto.getPassword());
     }

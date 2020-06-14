@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface MovieSessionService extends GenericService<MovieSession> {
     List<MovieSession> findAvailableSessions(Long movieId, LocalDate date);
-
 }

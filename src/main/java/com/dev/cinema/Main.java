@@ -77,6 +77,12 @@ public class Main {
         var orderService = context.getBean(OrderService.class);
         List<Ticket> tickets = shoppingCartService.getByUser(grabli2).getTickets();
         orderService.completeOrder(tickets, grabli2);
+        System.out.println(orderService.getById(1L));
+        System.out.println(userService.getById(1L));
+        System.out.println(movieService.getById(1L));
+        System.out.println(cinemaHallService.getById(1L));
+        System.out.println(movieSessionService.getById(1L));
+        System.out.println(shoppingCartService.getById(1L));
         System.out.println(orderService.getOrderHistory(grabli2));
     }
 }

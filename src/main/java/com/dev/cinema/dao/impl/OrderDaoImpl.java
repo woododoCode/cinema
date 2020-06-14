@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
@@ -18,13 +19,10 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Log4j2
+@AllArgsConstructor
 @Repository
 public class OrderDaoImpl implements OrderDao {
     private final SessionFactory sessionFactory;
-
-    public OrderDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public Order add(Order order) {
@@ -44,6 +42,33 @@ public class OrderDaoImpl implements OrderDao {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert order entity", e);
+        }
+    }
+
+    @Override
+    public List<Order> getAll() {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaQuery<Order> criteriaQuery =
+                    session.getCriteriaBuilder().createQuery(Order.class);
+            criteriaQuery.from(Order.class);
+            return session.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Error retrieving Orders. ", e);
+        }
+    }
+
+    @Override
+    public Order getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
+            Root<Order> sessionRoot = criteriaQuery.from(Order.class);
+            Predicate predicate = criteriaBuilder.equal(sessionRoot.get("id"), id);
+            sessionRoot.fetch("tickets", JoinType.LEFT);
+            return session.createQuery(criteriaQuery.where(predicate)).getSingleResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Failed to retrieve "
+                    + "Ticket from DB with ID: " + id, e);
         }
     }
 

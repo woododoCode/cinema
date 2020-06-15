@@ -9,7 +9,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Constraint(validatedBy = EmailValidator.class)
-@Target( { ElementType.FIELD })
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EmailConstraint {
     String message() default "Invalid email";

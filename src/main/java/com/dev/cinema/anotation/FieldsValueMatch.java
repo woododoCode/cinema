@@ -13,20 +13,19 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FieldMatchValidator.class)
 public @interface FieldsValueMatch {
-    String message() default "{constraints.fieldmatch}";
+    String message() default "Passwords dont";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String first();
-    String second();
+    String firstFieldName();
+    String secondFieldName();
 
     @Target({ElementType.TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
-    @interface List
-    {
+    @interface List {
         FieldsValueMatch[] value();
     }
 }

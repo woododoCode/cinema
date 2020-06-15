@@ -19,6 +19,8 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
         "com.dev.cinema.security",
         "com.dev.cinema.util",
         "com.dev.cinema.model.mappers",
+        "com.dev.cinema.validator",
+        "com.dev.cinema.config"
 })
 
 @AllArgsConstructor

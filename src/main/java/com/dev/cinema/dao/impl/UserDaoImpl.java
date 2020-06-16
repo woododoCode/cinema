@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
@@ -63,6 +64,7 @@ public class UserDaoImpl implements UserDao {
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
             Root<User> sessionRoot = criteriaQuery.from(User.class);
             Predicate predicate = criteriaBuilder.equal(sessionRoot.get("id"), id);
+            sessionRoot.fetch("rolename", JoinType.LEFT);
             return session.createQuery(criteriaQuery.where(predicate)).getSingleResult();
         } catch (Exception e) {
             throw new DataProcessingException("Failed to retrieve "
@@ -79,6 +81,7 @@ public class UserDaoImpl implements UserDao {
             Root<User> sessionRoot = criteriaQuery.from(User.class);
             Predicate predicate = criteriaBuilder
                     .equal(sessionRoot.get("email"), email);
+            sessionRoot.fetch("roles", JoinType.LEFT);
             criteriaQuery.select(sessionRoot).where(predicate);
             return Optional.ofNullable(session.createQuery(criteriaQuery).uniqueResult());
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.dev.cinema.model.dto.user;
 
 import com.dev.cinema.anotation.EmailConstraint;
-import com.dev.cinema.anotation.FieldsValueMatch;
+import com.dev.cinema.anotation.PasswordMatch;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -9,9 +9,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@FieldsValueMatch(firstFieldName = "password",
-        secondFieldName = "passwordConfirm",
-        message = "Passwords do not match!")
+@PasswordMatch(passwordValue = "password",
+        confirmPasswordValue = "passwordConfirm",
+        message = "Passwords does not match!")
 public class UserRequestDto {
     @EmailConstraint
     private String email;

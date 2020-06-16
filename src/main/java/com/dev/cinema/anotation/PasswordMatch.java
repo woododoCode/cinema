@@ -1,6 +1,6 @@
 package com.dev.cinema.anotation;
 
-import com.dev.cinema.validator.FieldMatchValidator;
+import com.dev.cinema.validator.PasswordMatchValidator;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,21 +11,21 @@ import javax.validation.Payload;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = FieldMatchValidator.class)
-public @interface FieldsValueMatch {
-    String message() default "Passwords dont";
+@Constraint(validatedBy = PasswordMatchValidator.class)
+public @interface PasswordMatch {
+    String message() default "Passwords must match!";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String firstFieldName();
-    String secondFieldName();
+    String passwordValue();
+    String confirmPasswordValue();
 
     @Target({ElementType.TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List {
-        FieldsValueMatch[] value();
+        PasswordMatch[] value();
     }
 }

@@ -9,11 +9,11 @@ import com.dev.cinema.service.interfaces.MovieSessionService;
 import com.dev.cinema.service.interfaces.ShoppingCartService;
 import com.dev.cinema.service.interfaces.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
@@ -35,8 +35,9 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/by-user")
-    public ShoppingCartResponseDto getByUserId(@RequestParam Long userId) {
+    public ShoppingCartResponseDto getByUserId(Authentication authentication) {
+        String name = authentication.getName();
         return shoppingCartMapper.cartToDto(shoppingCartService
-                .getByUser(userService.getById(userId)));
+                .getByUser(userService.findByEmail(name)));
     }
 }

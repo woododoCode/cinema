@@ -11,11 +11,11 @@ import com.dev.cinema.service.interfaces.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
@@ -35,9 +35,10 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderResponseDto> getByUserId(@RequestParam Long userId) {
+    public List<OrderResponseDto> getByUserId(Authentication authentication) {
+        String login = authentication.getName();
         return orderService
-                .getOrderHistory(userService.getById(userId))
+                .getOrderHistory(userService.findByEmail(login))
                 .stream()
                 .map(orderMapper::orderToDto)
                 .collect(Collectors.toList());

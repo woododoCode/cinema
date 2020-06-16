@@ -10,8 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PasswordMatch(passwordValue = "password",
-        confirmPasswordValue = "passwordConfirm",
-        message = "Passwords does not match!")
+        confirmPasswordValue = "passwordConfirm")
 public class UserRequestDto {
     @EmailConstraint
     private String email;

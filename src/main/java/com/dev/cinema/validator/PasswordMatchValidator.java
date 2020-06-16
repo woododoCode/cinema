@@ -18,10 +18,10 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
 
     @Override
     public boolean isValid(UserRequestDto requestDto, ConstraintValidatorContext context) {
-        final Object firstValue =
-                new BeanWrapperImpl(requestDto).getPropertyValue(password);
-        final Object secondValue =
-                new BeanWrapperImpl(requestDto).getPropertyValue(passwordConfirm);
+        final String firstValue =
+                (String) new BeanWrapperImpl(requestDto).getPropertyValue(password);
+        final String secondValue =
+                (String) new BeanWrapperImpl(requestDto).getPropertyValue(passwordConfirm);
         return firstValue == secondValue || firstValue != null && firstValue.equals(secondValue);
     }
 }

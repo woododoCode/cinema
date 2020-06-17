@@ -6,6 +6,7 @@ import com.dev.cinema.service.interfaces.RoleService;
 import com.dev.cinema.service.interfaces.ShoppingCartService;
 import com.dev.cinema.service.interfaces.UserService;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,6 @@ public class InjectDataController {
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(admin);
         shoppingCartService.registerNewShoppingCart(user);
-        return "Test data was added to DB!";
+        return "Enjoy data from DB!";
     }
 }

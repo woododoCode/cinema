@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) {
         http
                 .authorizeRequests()
-                .antMatchers("/h2/**").permitAll()
                 .antMatchers("/registration", "/inject", "/login")
                 .permitAll()
                 .antMatchers(HttpMethod.POST,"/orders/complete", "/shopping-carts/**")

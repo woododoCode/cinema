@@ -8,6 +8,7 @@ import com.dev.cinema.model.mappers.ShoppingCartMapper;
 import com.dev.cinema.service.interfaces.MovieSessionService;
 import com.dev.cinema.service.interfaces.ShoppingCartService;
 import com.dev.cinema.service.interfaces.UserService;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class ShoppingCartController {
 
     @PostMapping("/add-movie-session")
     public void addMovieSessionToUser(
-            @RequestBody ShoppingCartAddMovieSession shoppingCartAddMovieSession) {
+            @RequestBody @Valid ShoppingCartAddMovieSession shoppingCartAddMovieSession) {
         MovieSession movieSession = movieSessionService
                 .getById(shoppingCartAddMovieSession.getMovieSessionId());
         User user = userService.getById(shoppingCartAddMovieSession.getUserId());

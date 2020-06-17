@@ -7,6 +7,7 @@ import com.dev.cinema.model.mappers.CinemaHallDtoMapper;
 import com.dev.cinema.service.interfaces.CinemaHallService;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class CinemaHallController {
     private final CinemaHallDtoMapper cinemaHallDtoMapper;
 
     @PostMapping
-    public void addCinemaHall(@RequestBody CinemaHallRequestDto requestDto) {
+    public void addCinemaHall(@RequestBody @Valid CinemaHallRequestDto requestDto) {
         cinemaHallService.add(cinemaHallDtoMapper.dtoToCinemaHall(requestDto));
     }
 

@@ -10,6 +10,7 @@ import com.dev.cinema.service.interfaces.ShoppingCartService;
 import com.dev.cinema.service.interfaces.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class OrderController {
     private final OrderMapper orderMapper;
 
     @PostMapping("/complete")
-    public void completeOrder(@RequestBody OrderRequestDto orderRequestDto) {
+    public void completeOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
         User user = userService.getById(orderRequestDto.getUserId());
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
         orderService.completeOrder(shoppingCart.getTickets(),user);

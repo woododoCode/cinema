@@ -13,11 +13,10 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @Configuration
 @PropertySource("classpath:db.properties")
-@ComponentScan(basePackages = {
+@ComponentScan(value = {
         "com.dev.cinema.service",
         "com.dev.cinema.dao",
         "com.dev.cinema.security",
-        "com.dev.cinema.util",
         "com.dev.cinema.model.mappers",
         "com.dev.cinema.validator",
         "com.dev.cinema.config"
@@ -25,7 +24,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @AllArgsConstructor
 public class AppConfig {
-    private Environment env;
+    private final Environment env;
 
     @Bean
     public DataSource getDataSource() {

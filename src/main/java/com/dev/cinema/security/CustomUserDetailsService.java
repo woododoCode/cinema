@@ -2,7 +2,6 @@ package com.dev.cinema.security;
 
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.interfaces.UserService;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.User.UserBuilder;
